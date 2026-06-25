@@ -1,0 +1,65 @@
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+
+public class GamificationManager : MonoBehaviour
+{
+    public int xp = 0;
+    public int level = 1;
+    public int xpToNextLevel = 100;
+
+    public Slider xpSlider;
+    public TMP_Text levelText;
+
+    void Start()
+    {
+        LoadProgress();
+        UpdateUI();
+    }
+
+    public void AddXP(int amount)
+    {
+        xp += amount;
+
+        if (xp >= xpToNextLevel)
+        {
+            LevelUp();
+        }
+
+        UpdateUI();
+        SaveProgress();
+    }
+
+    void LevelUp()
+    {
+        level++;
+        xp = 0;
+        xpToNextLevel += 50;
+
+        Debug.Log("Level Up! Now at Level " + level);
+        FindObjectOfType<LeaderboardManager>()?.CheckForNewHighScore(level);
+    }
+
+    void UpdateUI()
+    {
+        if (xpSlider != null)
+            xpSlider.value = (float)xp / xpToNextLevel;
+
+        if (levelText != null)
+            levelText.text = "Level " + level;
+    }
+
+    void SaveProgress()
+    {
+        PlayerPrefs.SetInt("XP", xp);
+        PlayerPrefs.SetInt("Level", level);
+        PlayerPrefs.SetInt("XPToNext", xpToNextLevel);
+    }
+
+    void LoadProgress()
+    {
+        xp = PlayerPrefs.GetInt("XP", 0);
+        level = PlayerPrefs.GetInt("Level", 1);
+        xpToNextLevel = PlayerPrefs.GetInt("XPToNext", 100);
+    }
+}

@@ -1,0 +1,31 @@
+using UnityEngine;
+using UnityEngine.UI;
+using System.Collections.Generic;
+
+public class BadgeSystem : MonoBehaviour
+{
+    public List<BadgeData> badges;
+    public Image badgeDisplay;
+
+    public void UnlockBadge(string badgeName)
+    {
+        foreach (var badge in badges)
+        {
+            if (badge.badgeName == badgeName && !badge.unlocked)
+            {
+                badge.unlocked = true;
+                badgeDisplay.sprite = badge.icon;
+                badgeDisplay.color = Color.white;
+                Debug.Log("Badge Unlocked: " + badgeName);
+            }
+        }
+    }
+
+    public bool IsUnlocked(string badgeName)
+    {
+        foreach (var badge in badges)
+            if (badge.badgeName == badgeName) return badge.unlocked;
+
+        return false;
+    }
+}

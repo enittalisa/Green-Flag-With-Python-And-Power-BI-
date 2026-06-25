@@ -1,0 +1,23 @@
+using UnityEngine;
+using TMPro;
+
+public class LeaderboardManager : MonoBehaviour
+{
+    public TMP_Text leaderboardText;
+
+    void Start()
+    {
+        int highLevel = PlayerPrefs.GetInt("HighLevel", 1);
+        leaderboardText.text = "🏆 Highest Level: " + highLevel;
+    }
+
+    public void CheckForNewHighScore(int currentLevel)
+    {
+        int storedLevel = PlayerPrefs.GetInt("HighLevel", 1);
+        if (currentLevel > storedLevel)
+        {
+            PlayerPrefs.SetInt("HighLevel", currentLevel);
+            leaderboardText.text = "🏆 Highest Level: " + currentLevel;
+        }
+    }
+}
